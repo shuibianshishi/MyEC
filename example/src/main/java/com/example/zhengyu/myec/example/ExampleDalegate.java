@@ -3,7 +3,6 @@ package com.example.zhengyu.myec.example;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.zhengyu.latte.delegates.LatteDalegate;
 import com.example.zhengyu.latte.net.RestClient;
@@ -31,6 +30,7 @@ public class ExampleDalegate extends LatteDalegate {
     public void testRestClient(){
         RestClient.builder()
                 .url("http://news.baidu.com/")
+                .loader(getContext())
                 .error(new IError() {
                     @Override
                     public void onError(int code, String msg) {
@@ -46,7 +46,7 @@ public class ExampleDalegate extends LatteDalegate {
                 .success(new ISuccess() {
                     @Override
                     public void onSuccess(String reponse) {
-                        Toast.makeText(getContext(),reponse,Toast.LENGTH_LONG).show();
+                       // Toast.makeText(getContext(),reponse,Toast.LENGTH_LONG).show();
                     }
                 })
                 .raw("")

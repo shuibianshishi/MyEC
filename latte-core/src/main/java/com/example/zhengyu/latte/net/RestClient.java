@@ -1,10 +1,15 @@
 package com.example.zhengyu.latte.net;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.example.zhengyu.latte.net.callback.IError;
 import com.example.zhengyu.latte.net.callback.IFailure;
 import com.example.zhengyu.latte.net.callback.IRequest;
 import com.example.zhengyu.latte.net.callback.ISuccess;
 import com.example.zhengyu.latte.net.callback.RequestCallBack;
+import com.example.zhengyu.latte.ui.LatteLoader;
+import com.example.zhengyu.latte.ui.LoaderStyle;
 
 import java.util.WeakHashMap;
 
@@ -26,16 +31,22 @@ public class RestClient {
     private final IRequest IREQUEST;
     private final ISuccess ISUCCESS;
     private final RequestBody BODY;
+    private final Context CONTEXT;
+    private final LoaderStyle LOADER_STYLE;
 
 
     public RestClient(String url,
-                       WeakHashMap<String, Object> params,
-                       IError ierror,
-                       IFailure ifailure,
-                       IRequest irequest,
-                       ISuccess isuccess,
-                       RequestBody body) {
+                      WeakHashMap<String, Object> params,
+                      IError ierror,
+                      IFailure ifailure,
+                      IRequest irequest,
+                      ISuccess isuccess,
+                      RequestBody body,
+                      Context context,
+                      LoaderStyle loader_style) {
         URL = url;
+        CONTEXT = context;
+        LOADER_STYLE = loader_style;
         PARAMS.putAll(params);
         IERROR = ierror;
         IFAILURE = ifailure;
@@ -54,6 +65,12 @@ public class RestClient {
         if(IREQUEST!=null){
             IREQUEST.onRequestStart();
         }
+
+        if (LOADER_STYLE != null) {
+            LatteLoader.showLoading(CONTEXT, LOADER_STYLE);
+            Log.d("dialog","start");
+        }
+
         switch (method){
             case GET:
                 call = service.get(URL,PARAMS);
@@ -82,7 +99,7 @@ public class RestClient {
                 IERROR,
                 IFAILURE,
                 IREQUEST,
-                ISUCCESS);
+                ISUCCESS,LOADER_STYLE);
     }
 
     public final void get(){
