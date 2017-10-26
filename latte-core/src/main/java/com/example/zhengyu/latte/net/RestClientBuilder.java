@@ -8,6 +8,7 @@ import com.example.zhengyu.latte.net.callback.IRequest;
 import com.example.zhengyu.latte.net.callback.ISuccess;
 import com.example.zhengyu.latte.ui.LoaderStyle;
 
+import java.io.File;
 import java.util.Objects;
 import java.util.WeakHashMap;
 
@@ -29,6 +30,10 @@ public class RestClientBuilder {
     private RequestBody mBody = null;
     private Context mContext = null;
     private LoaderStyle mLoaderStyle = null;
+    private File mFile = null;
+    private String mDownloadDir = null;
+    private String mExtension = null;
+    private String mName = null;
 
 
     RestClientBuilder(){
@@ -52,6 +57,31 @@ public class RestClientBuilder {
 
     public final RestClientBuilder raw(String raw){
         this.mBody = RequestBody.create(MediaType.parse("application/json;charset=UTF-8"), raw);
+        return this;
+    }
+
+    public final RestClientBuilder file(String fileUrl) {
+        mFile = new File(fileUrl);
+        return this;
+    }
+
+    public final RestClientBuilder file(File file) {
+        mFile = file;
+        return this;
+    }
+
+    public final RestClientBuilder name(String name) {
+        this.mName = name;
+        return this;
+    }
+
+    public final RestClientBuilder dir(String dir) {
+        this.mDownloadDir = dir;
+        return this;
+    }
+
+    public final RestClientBuilder extension(String extension) {
+        this.mExtension = extension;
         return this;
     }
 
@@ -90,7 +120,7 @@ public class RestClientBuilder {
     public RestClient builder(){
         return new RestClient(mUrl,mParams,
                 mIError, mIFailure,mIRequest,mISuccess,
-                mBody, mContext, mLoaderStyle);
+                mBody, mContext, mLoaderStyle,mFile,mDownloadDir,mExtension,mName);
     }
 
 }

@@ -6,14 +6,17 @@ import com.joanzapata.iconify.Iconify;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okhttp3.Interceptor;
+
 /**
  * Created by ZHENGYU on 2017/10/8.
  */
 
 public final class Configurator {
 
-    private static final HashMap<String,Object> EC_CONFIGS = new HashMap<>();//配置信息
+    private static final HashMap<Object,Object> EC_CONFIGS = new HashMap<>();//配置信息
     private static final ArrayList<IconFontDescriptor> ICONS = new ArrayList<>();//字体图标配置
+    private static final ArrayList<Interceptor> INTERCEPTORS = new ArrayList<>();//拦截器
 
     private Configurator(){
         EC_CONFIGS.put(ConfigType.CONFIG_READY.name(),false);
@@ -24,7 +27,7 @@ public final class Configurator {
         return Holder.INSTANCE;
     }
 
-    final HashMap<String,Object> getEcConfigs(){
+    final HashMap<Object,Object> getEcConfigs(){
         return EC_CONFIGS;
     }
 
@@ -52,6 +55,23 @@ public final class Configurator {
 
     public final Configurator withApiHost(String host){
         EC_CONFIGS.put(ConfigType.API_HOST.name(),host);
+        return this;
+    }
+
+    public final Configurator withInterceptor(Interceptor interceptor) {
+        INTERCEPTORS.add(interceptor);
+        EC_CONFIGS .put(ConfigType.INTERCEPTORS, INTERCEPTORS);
+        return this;
+    }
+
+    public final Configurator withInterceptors(ArrayList<Interceptor> interceptors) {
+        INTERCEPTORS.addAll(interceptors);
+        EC_CONFIGS .put(ConfigType.INTERCEPTORS, INTERCEPTORS);
+        return this;
+    }
+
+    public final Configurator withLoaderDelayed(long delayed) {
+        EC_CONFIGS.put(ConfigType.LOADER_DELAYED, delayed);
         return this;
     }
 
